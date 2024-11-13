@@ -7,7 +7,7 @@ const path = require('path');
 
 // Function to send email
 const sendBulkEmail = async (req, res, next) => {
-    const { subject, recipients, message, template, useTemplate, personalize } = req.body;
+    const { subject, recipients, message, template, useTemplate, personalize, date } = req.body;
     const csvFile = req.file?.path; // Check if a file is provided
 
     const emails = [];
@@ -19,7 +19,7 @@ const sendBulkEmail = async (req, res, next) => {
             .pipe(csvParser())
             .on('data', (data) => {
                 const email = data["Email Address"];
-                const firstname = data["First Name"];
+                const firstname = data["Firstname"];
                 if (email) emails.push(email);
                 if (firstname) firstnames.push(firstname);
             })
@@ -53,7 +53,8 @@ const sendBulkEmail = async (req, res, next) => {
                         useTemplate,
                         template,
                         firstname,
-                        personalize
+                        personalize,
+                        date
                     )
                 )
             );
